@@ -4,6 +4,7 @@ import 'package:habit/components/buttons/expandable_fab.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/config/theme.dart';
 import 'package:habit/constants/inspirational_messages.dart';
+import 'package:habit/screens/habits/new_habit/index.dart';
 
 class HabitsScreen extends StatefulWidget {
   HabitsScreen({Key? key, required this.config}) : super(key: key);
@@ -15,7 +16,16 @@ class HabitsScreen extends StatefulWidget {
 }
 
 class _HabitsScreenState extends State<HabitsScreen> {
-  void _actionPressed() {}
+  void _initiateHabitCreateWizard() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewHabitWizardCategory(
+          config: this.widget.config,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +41,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
     return ExpandableFab(
       children: [
         FloatingActionButton.extended(
-          onPressed: _actionPressed,
+          onPressed: _initiateHabitCreateWizard,
           icon: Icon(Icons.add_circle_outline_rounded),
           label: Text("New Habit"),
         )
