@@ -55,6 +55,12 @@ List<CardData> _list1 = [
       color: Colors.green.shade700),
   CardWithIcon(
       label: 'Health', iconData: Icons.add_box_outlined, color: Colors.teal),
+  CardWithIcon(label: 'Home', iconData: Icons.home, color: Colors.orange),
+  CardWithIcon(label: 'Art', iconData: Icons.brush, color: Colors.redAccent),
+  CardWithIcon(
+      label: 'Finance',
+      iconData: Icons.attach_money,
+      color: Colors.teal.shade900),
 ];
 List<CardData> _list2 = [
   CardWithSvg(
@@ -69,6 +75,12 @@ List<CardData> _list2 = [
       label: 'Nutrition',
       iconData: Icons.food_bank_outlined,
       color: Colors.yellow.shade700),
+  CardWithIcon(
+      label: 'Outdoor',
+      iconData: Icons.terrain,
+      color: Colors.orangeAccent.shade400),
+  CardWithIcon(label: 'Work', iconData: Icons.work, color: Colors.brown),
+  CardWithIcon(label: 'Other', iconData: Icons.more, color: Colors.black),
 ];
 
 List<List<CardData>> _combinedList = [_list1, _list2];
