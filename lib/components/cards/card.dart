@@ -55,10 +55,7 @@ class CardWidget extends StatelessWidget {
             this.data.label,
             style: TextStyle(fontSize: 10),
           ),
-          Icon(
-            this.data.icon,
-            color: this.data.color,
-          )
+          this.data.icon,
         ],
       ),
     );

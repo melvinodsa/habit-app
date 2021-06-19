@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/config/theme.dart';
 
-import 'habits/index.dart';
+import 'habits/new_habit/index.dart';
 
 class Screens extends StatelessWidget {
   Screens({required this.config});
@@ -19,7 +19,7 @@ class Screens extends StatelessWidget {
           appBarTheme: AppBarTheme(
               backgroundColor: colorScheme.navbarBackground,
               titleTextStyle: TextStyle(color: colorScheme.primaryTextColor))),
-      home: HabitsScreen(
+      home: NewHabitWizardCategory(
         config: this.config,
       ),
     );

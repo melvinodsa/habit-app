@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habit/components/cards/card.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/card_data.dart';
@@ -41,15 +42,33 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
 }
 
 List<CardData> _list1 = [
-  CardData(
+  CardWithIcon(
     label: 'Quit a bad habit',
-    icon: Icons.block,
+    iconData: Icons.block,
     color: Colors.red,
   ),
-  CardData(label: 'Study', icon: Icons.school, color: Colors.purple),
+  CardWithIcon(
+      label: 'Study', iconData: Icons.school, color: Colors.purple.shade900),
+  CardWithIcon(
+      label: 'Enterainment',
+      iconData: Icons.movie,
+      color: Colors.green.shade700),
+  CardWithIcon(
+      label: 'Health', iconData: Icons.add_box_outlined, color: Colors.teal),
 ];
 List<CardData> _list2 = [
-  CardData(label: 'Sports', icon: Icons.directions_bike, color: Colors.green),
+  CardWithSvg(
+      label: 'Meditation',
+      svgPath: 'assets/meditation.svg',
+      color: Colors.purple),
+  CardWithIcon(
+      label: 'Sports', iconData: Icons.directions_bike, color: Colors.blueGrey),
+  CardWithIcon(
+      label: 'Social', iconData: Icons.message, color: Colors.greenAccent),
+  CardWithIcon(
+      label: 'Nutrition',
+      iconData: Icons.food_bank_outlined,
+      color: Colors.yellow.shade700),
 ];
 
 List<List<CardData>> _combinedList = [_list1, _list2];
