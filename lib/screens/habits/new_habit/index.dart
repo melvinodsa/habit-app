@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habit/components/cards/card.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/card_data.dart';
+import 'package:habit/models/habit.dart';
+import 'package:habit/screens/habits/new_habit/track_progress.dart';
 
 class NewHabitWizardCategory extends StatefulWidget {
   NewHabitWizardCategory({Key? key, required this.config}) : super(key: key);
@@ -22,6 +23,18 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
     );
   }
 
+  void Function() _gotoTrackProgress(Habit habit) {
+    return () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  TrackHabitProgress(config: this.widget.config, habit: habit),
+            ),
+          )
+        };
+  }
+
   Row _buildBody() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -31,7 +44,11 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
               width: MediaQuery.of(context).size.width / 2,
               child: Column(
                 children: list
-                    .map((e) => CardWidget(context: context, data: e))
+                    .map((e) => CardWidget(
+                        context: context,
+                        data: e,
+                        onPress: _gotoTrackProgress(
+                            Habit(category: Category(data: e)))))
                     .toList(),
               ),
             ),
@@ -43,44 +60,66 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
 
 List<CardData> _list1 = [
   CardWithIcon(
+    id: 1,
     label: 'Quit a bad habit',
     iconData: Icons.block,
     color: Colors.red,
   ),
   CardWithIcon(
-      label: 'Study', iconData: Icons.school, color: Colors.purple.shade900),
+      id: 2,
+      label: 'Study',
+      iconData: Icons.school,
+      color: Colors.purple.shade900),
   CardWithIcon(
+      id: 3,
       label: 'Enterainment',
       iconData: Icons.movie,
       color: Colors.green.shade700),
   CardWithIcon(
-      label: 'Health', iconData: Icons.add_box_outlined, color: Colors.teal),
-  CardWithIcon(label: 'Home', iconData: Icons.home, color: Colors.orange),
-  CardWithIcon(label: 'Art', iconData: Icons.brush, color: Colors.redAccent),
+      id: 4,
+      label: 'Health',
+      iconData: Icons.add_box_outlined,
+      color: Colors.teal),
   CardWithIcon(
+      id: 5, label: 'Home', iconData: Icons.home, color: Colors.orange),
+  CardWithIcon(
+      id: 6, label: 'Art', iconData: Icons.brush, color: Colors.redAccent),
+  CardWithIcon(
+      id: 7,
       label: 'Finance',
       iconData: Icons.attach_money,
       color: Colors.teal.shade900),
 ];
 List<CardData> _list2 = [
   CardWithSvg(
+      id: 8,
       label: 'Meditation',
       svgPath: 'assets/meditation.svg',
       color: Colors.purple),
   CardWithIcon(
-      label: 'Sports', iconData: Icons.directions_bike, color: Colors.blueGrey),
+      id: 9,
+      label: 'Sports',
+      iconData: Icons.directions_bike,
+      color: Colors.blueGrey),
   CardWithIcon(
-      label: 'Social', iconData: Icons.message, color: Colors.greenAccent),
+      id: 10,
+      label: 'Social',
+      iconData: Icons.message,
+      color: Colors.greenAccent),
   CardWithIcon(
+      id: 11,
       label: 'Nutrition',
       iconData: Icons.food_bank_outlined,
       color: Colors.yellow.shade700),
   CardWithIcon(
+      id: 12,
       label: 'Outdoor',
       iconData: Icons.terrain,
       color: Colors.orangeAccent.shade400),
-  CardWithIcon(label: 'Work', iconData: Icons.work, color: Colors.brown),
-  CardWithIcon(label: 'Other', iconData: Icons.more, color: Colors.black),
+  CardWithIcon(
+      id: 13, label: 'Work', iconData: Icons.work, color: Colors.brown),
+  CardWithIcon(
+      id: 14, label: 'Other', iconData: Icons.more, color: Colors.black),
 ];
 
 List<List<CardData>> _combinedList = [_list1, _list2];

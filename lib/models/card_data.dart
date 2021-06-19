@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CardData {
+  late int id;
   late String label;
   late Widget icon;
   late Color color;
@@ -9,10 +10,14 @@ class CardData {
 
 class CardWithIcon implements CardData {
   CardWithIcon(
-      {required this.label, required this.iconData, required this.color}) {
+      {required this.id,
+      required this.label,
+      required this.iconData,
+      required this.color}) {
     this.icon = Icon(this.iconData, color: this.color);
   }
 
+  late int id;
   late String label;
   final IconData iconData;
   late Color color;
@@ -21,7 +26,10 @@ class CardWithIcon implements CardData {
 
 class CardWithSvg implements CardData {
   CardWithSvg(
-      {required this.label, required this.svgPath, required this.color}) {
+      {required this.id,
+      required this.label,
+      required this.svgPath,
+      required this.color}) {
     this.icon = SvgPicture.asset(
       this.svgPath,
       semanticsLabel: this.label,
@@ -30,6 +38,7 @@ class CardWithSvg implements CardData {
       color: this.color,
     );
   }
+  late int id;
   late String label;
   final String svgPath;
   late Color color;

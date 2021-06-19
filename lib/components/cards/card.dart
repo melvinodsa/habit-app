@@ -6,10 +6,12 @@ class CardWidget extends StatelessWidget {
     Key? key,
     required this.context,
     required this.data,
+    required this.onPress,
   }) : super(key: key);
 
   final BuildContext context;
   final CardData data;
+  final void Function() onPress;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,7 @@ class CardWidget extends StatelessWidget {
   InkWell _cardBody() {
     return InkWell(
         splashColor: this.data.color.withAlpha(30),
-        onTap: () {
-          print('Card tapped.');
-        },
+        onTap: this.onPress,
         child: _cardBodyContent());
   }
 

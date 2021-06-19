@@ -1,6 +1,6 @@
-import 'package:habit/config/theme.dart';
+import 'package:flutter/material.dart';
 
 class AppConfig {
   AppConfig();
-  Theme theme = Theme(appTheme: AppTheme.Dark);
+  ThemeData theme = ThemeData.dark();
 }

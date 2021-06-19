@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habit/components/buttons/expandable_fab.dart';
 import 'package:habit/config/index.dart';
-import 'package:habit/config/theme.dart';
 import 'package:habit/constants/inspirational_messages.dart';
 import 'package:habit/screens/habits/new_habit/index.dart';
 
@@ -38,7 +37,6 @@ class _HabitsScreenState extends State<HabitsScreen> {
   }
 
   Center _buildHabitBody() {
-    var styles = this.widget.config.theme.appTheme.getLayoutColors();
     return Center(
       child: Container(
         margin:
@@ -47,20 +45,18 @@ class _HabitsScreenState extends State<HabitsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _backgroundIcon(),
-            _inspirationMessage(styles),
-            _createHabitNudge(styles),
+            _inspirationMessage(),
+            _createHabitNudge(),
           ],
         ),
       ),
     );
   }
 
-  Text _createHabitNudge(LayoutColors styles) {
+  Text _createHabitNudge() {
     return Text(
       'Let\'s start a new habit',
-      style: TextStyle(
-          color: styles.primaryTextColor.withAlpha(150),
-          fontWeight: FontWeight.bold),
+      style: TextStyle(fontWeight: FontWeight.bold),
     );
   }
 
@@ -74,13 +70,12 @@ class _HabitsScreenState extends State<HabitsScreen> {
     );
   }
 
-  Container _inspirationMessage(LayoutColors styles) {
+  Container _inspirationMessage() {
     return Container(
       padding:
           EdgeInsets.only(left: 13.0, top: 15.0, right: 13.0, bottom: 25.0),
       child: Text(
         getRandomInspirationalMessage(),
-        style: TextStyle(color: styles.primaryTextColor),
       ),
     );
   }
