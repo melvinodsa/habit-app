@@ -35,33 +35,36 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
     );
   }
 
-  Column _buildNumerical() {
-    return Column(
-      children: [
-        ElevatedButton(
-            onPressed: () => {print("pressed okay")},
-            child: Text("With a NUMERIC value")),
-        Text(
-            "If you just want to establish a value as a daily goal or limit for the habit"),
+  Widget _buildNumerical() {
+    return _TrackProgressOption(
+      context: context,
+      buttonText: [
+        _SpecialText(label: "With a ", emphasised: false),
+        _SpecialText(label: "Numeric", emphasised: true),
+        _SpecialText(label: " value", emphasised: false),
       ],
+      helperText:
+          "If you just want to establish a value as a daily goal or limit for the habit.",
     );
   }
 
-  Column _buildYesOrNo() {
-    return Column(
-      children: [
-        ElevatedButton(
-            onPressed: () => {print("pressed okay")},
-            child: Text("With a YES or NO")),
-        Text(
-            "If you just want to record whether you succeed with the habit or not."),
+  Widget _buildYesOrNo() {
+    return _TrackProgressOption(
+      context: context,
+      buttonText: [
+        _SpecialText(label: "With a ", emphasised: false),
+        _SpecialText(label: "Yes", emphasised: true),
+        _SpecialText(label: " or ", emphasised: false),
+        _SpecialText(label: "No", emphasised: true)
       ],
+      helperText:
+          "If you just want to record whether you succeed with the habit or not.",
     );
   }
 
   Widget _buildQuestion() {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 40),
       child: Text(
         "How do you want to evaluate your progress?",
         textAlign: TextAlign.center,
@@ -71,5 +74,59 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
         ),
       ),
     );
+  }
+}
+
+class _TrackProgressOption extends StatelessWidget {
+  const _TrackProgressOption({
+    Key? key,
+    required this.context,
+    required this.buttonText,
+    required this.helperText,
+  }) : super(key: key);
+
+  final BuildContext context;
+  final List<_SpecialText> buttonText;
+  final String helperText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 40),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width - 80,
+              child: ElevatedButton(
+                  onPressed: () => {print("pressed okay")},
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.only(top: 20, bottom: 20)),
+                  child: RichText(
+                      text: TextSpan(
+                          children: buttonText
+                              .map((i) => i.buildTextSpan())
+                              .toList()))),
+            ),
+          ),
+          Text(helperText),
+        ],
+      ),
+    );
+  }
+}
+
+class _SpecialText {
+  _SpecialText({required this.label, required this.emphasised});
+  final String label;
+  final bool emphasised;
+
+  TextSpan buildTextSpan() {
+    return TextSpan(
+        text: label,
+        style: TextStyle(
+            fontSize: emphasised ? 20 : 15,
+            fontWeight: emphasised ? FontWeight.bold : FontWeight.normal));
   }
 }
