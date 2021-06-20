@@ -2,7 +2,8 @@ import 'card_data.dart';
 
 class Habit {
   Habit(
-      {required this.category, this.trackProgress = TrackProgress.WithYesOrNo});
+      {required this.category,
+      this.trackProgress = TrackProgress.WithNumerical});
   final Category category;
   TrackProgress trackProgress;
 }
