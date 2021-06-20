@@ -24,7 +24,7 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
   }
 
   void Function() _gotoHabitDetails(TrackProgress progressWith) {
-    this.widget.habit.trackProgressWith = progressWith;
+    this.widget.habit.trackProgress = progressWith;
     return () => {
           Navigator.push(
             context,

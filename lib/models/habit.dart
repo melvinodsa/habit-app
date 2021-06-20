@@ -1,9 +1,10 @@
 import 'card_data.dart';
 
 class Habit {
-  Habit({required this.category});
+  Habit(
+      {required this.category, this.trackProgress = TrackProgress.WithYesOrNo});
   final Category category;
-  late TrackProgress trackProgressWith;
+  TrackProgress trackProgress;
 }
 
 class Category {
