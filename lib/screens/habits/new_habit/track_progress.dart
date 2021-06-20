@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/habit.dart';
+import 'package:habit/screens/habits/new_habit/habit_details.dart';
 
 class TrackHabitProgress extends StatefulWidget {
   TrackHabitProgress({Key? key, required this.config, required this.habit})
@@ -20,6 +21,19 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
       appBar: AppBar(title: Text("Track progress")),
       body: _buildBody(),
     );
+  }
+
+  void Function() _gotoHabitDetails(TrackProgress progressWith) {
+    this.widget.habit.trackProgressWith = progressWith;
+    return () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HabitDetails(
+                  config: this.widget.config, habit: this.widget.habit),
+            ),
+          )
+        };
   }
 
   Widget _buildBody() {
@@ -45,6 +59,7 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
       ],
       helperText:
           "If you just want to establish a value as a daily goal or limit for the habit.",
+      onPress: _gotoHabitDetails(TrackProgress.WithNumerical),
     );
   }
 
@@ -59,18 +74,21 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
       ],
       helperText:
           "If you just want to record whether you succeed with the habit or not.",
+      onPress: _gotoHabitDetails(TrackProgress.WithYesOrNo),
     );
   }
 
   Widget _buildQuestion() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 40),
-      child: Text(
-        "How do you want to evaluate your progress?",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 40),
+        child: Text(
+          "How do you want to evaluate your progress?",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -83,11 +101,13 @@ class _TrackProgressOption extends StatelessWidget {
     required this.context,
     required this.buttonText,
     required this.helperText,
+    required this.onPress,
   }) : super(key: key);
 
   final BuildContext context;
   final List<_SpecialText> buttonText;
   final String helperText;
+  final void Function() onPress;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +120,7 @@ class _TrackProgressOption extends StatelessWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 80,
               child: ElevatedButton(
-                  onPressed: () => {print("pressed okay")},
+                  onPressed: onPress,
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.only(top: 20, bottom: 20)),
                   child: RichText(

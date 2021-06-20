@@ -23,13 +23,13 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
     );
   }
 
-  void Function() _gotoTrackProgress(Habit habit) {
+  void Function() _gotoTrackProgress(Category category) {
     return () => {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  TrackHabitProgress(config: this.widget.config, habit: habit),
+              builder: (context) => TrackHabitProgress(
+                  config: this.widget.config, habit: Habit(category: category)),
             ),
           )
         };
@@ -47,8 +47,7 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
                     .map((e) => CardWidget(
                         context: context,
                         data: e,
-                        onPress: _gotoTrackProgress(
-                            Habit(category: Category(data: e)))))
+                        onPress: _gotoTrackProgress(Category(data: e))))
                     .toList(),
               ),
             ),

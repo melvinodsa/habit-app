@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/card_data.dart';
 import 'package:habit/models/habit.dart';
-import 'package:habit/screens/habits/index.dart';
-import 'package:habit/screens/habits/new_habit/track_progress.dart';
+
+import 'habits/new_habit/habit_details.dart';
 
 class Screens extends StatelessWidget {
   Screens({required this.config});
@@ -14,7 +14,7 @@ class Screens extends StatelessWidget {
       title: 'Habits',
       debugShowCheckedModeBanner: false,
       theme: config.theme,
-      home: TrackHabitProgress(
+      home: HabitDetails(
         config: config,
         habit: Habit(
             category: Category(
