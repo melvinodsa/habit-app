@@ -29,6 +29,7 @@ class _HabitDetailsState extends State<HabitDetails> {
         children: [
           _buildQuestion(),
           _buildInputs(),
+          _buildNextButton(),
         ],
       ),
     );
@@ -65,6 +66,9 @@ class _HabitDetailsState extends State<HabitDetails> {
       Container(
         margin: EdgeInsets.only(bottom: 30),
         child: TextFormField(
+          onChanged: (value) {
+            this.widget.habit.name = value;
+          },
           decoration: InputDecoration(
             labelText: 'Habit',
             border: OutlineInputBorder(),
@@ -79,8 +83,11 @@ class _HabitDetailsState extends State<HabitDetails> {
         ),
       ),
       Container(
-        margin: EdgeInsets.only(bottom: 30),
+        margin: EdgeInsets.only(bottom: 40),
         child: TextFormField(
+          onChanged: (value) {
+            this.widget.habit.description = value;
+          },
           decoration: InputDecoration(
             labelText: 'Description (optional)',
             border: OutlineInputBorder(),
@@ -170,7 +177,7 @@ class _HabitDetailsState extends State<HabitDetails> {
             style: TextStyle(color: theme.textTheme.caption?.color),
           )),
       Container(
-        margin: EdgeInsets.only(bottom: 30),
+        margin: EdgeInsets.only(bottom: 40),
         child: TextFormField(
           decoration: InputDecoration(
             labelText: 'Description (optional)',
@@ -179,5 +186,18 @@ class _HabitDetailsState extends State<HabitDetails> {
         ),
       )
     ];
+  }
+
+  Widget _buildNextButton() {
+    return Container(
+      width: MediaQuery.of(context).size.width - 80,
+      child: ElevatedButton(
+        onPressed: () => {},
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.only(top: 20, bottom: 20),
+        ),
+        child: Text("Next"),
+      ),
+    );
   }
 }
