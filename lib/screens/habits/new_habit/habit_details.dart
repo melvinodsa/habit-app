@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/habit.dart';
+import 'package:habit/screens/habits/new_habit/habit_frequency.dart';
 
 class HabitDetails extends StatefulWidget {
   HabitDetails({Key? key, required this.config, required this.habit})
@@ -21,6 +22,18 @@ class _HabitDetailsState extends State<HabitDetails> {
       appBar: AppBar(title: Text("Details")),
       body: _buildBody(),
     );
+  }
+
+  void Function() _gotoHabitFrequency() {
+    return () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HabitFrequency(
+                  config: this.widget.config, habit: this.widget.habit),
+            ),
+          )
+        };
   }
 
   Widget _buildBody() {
@@ -212,7 +225,7 @@ class _HabitDetailsState extends State<HabitDetails> {
     return Container(
       width: MediaQuery.of(context).size.width - 80,
       child: ElevatedButton(
-        onPressed: () => {},
+        onPressed: _gotoHabitFrequency(),
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.only(top: 20, bottom: 20),
         ),
