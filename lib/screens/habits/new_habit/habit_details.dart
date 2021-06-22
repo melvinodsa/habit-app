@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/habit.dart';
 
@@ -103,6 +104,9 @@ class _HabitDetailsState extends State<HabitDetails> {
       Container(
         margin: EdgeInsets.only(bottom: 30),
         child: TextFormField(
+          onChanged: (value) {
+            this.widget.habit.name = value;
+          },
           decoration: InputDecoration(
             labelText: 'Habit',
             border: OutlineInputBorder(),
@@ -118,22 +122,25 @@ class _HabitDetailsState extends State<HabitDetails> {
               width: MediaQuery.of(context).size.width / 2 - 90,
               margin: EdgeInsets.only(right: 10),
               child: DropdownButtonFormField(
-                value: "At least",
-                onChanged: (val) => {},
+                value: "1",
+                onChanged: (val) => {
+                  this.widget.habit.operator =
+                      parseNumericalTrackOperator(val.toString())
+                },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                 ),
                 items: [
                   DropdownMenuItem(
-                    value: "At least",
+                    value: NumericalTrackOperator.Atleast.toEnumString(),
                     child: Text("At least"),
                   ),
                   DropdownMenuItem(
-                    value: "Less than",
+                    value: NumericalTrackOperator.LessThan.toEnumString(),
                     child: Text("Less than"),
                   ),
                   DropdownMenuItem(
-                    value: "Exactly",
+                    value: NumericalTrackOperator.Exactly.toEnumString(),
                     child: Text("Exactly"),
                   ),
                 ],
@@ -142,6 +149,13 @@ class _HabitDetailsState extends State<HabitDetails> {
             Container(
               width: MediaQuery.of(context).size.width / 2 - 90,
               child: TextFormField(
+                onChanged: (value) {
+                  this.widget.habit.goal = int.parse(value);
+                },
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
                 decoration: InputDecoration(
                   labelText: 'Goal',
                   border: OutlineInputBorder(),
@@ -160,6 +174,9 @@ class _HabitDetailsState extends State<HabitDetails> {
               width: MediaQuery.of(context).size.width / 2 - 80,
               margin: EdgeInsets.only(right: 10),
               child: TextFormField(
+                onChanged: (value) {
+                  this.widget.habit.unit = value;
+                },
                 decoration: InputDecoration(
                   labelText: 'Unit (optional)',
                   border: OutlineInputBorder(),
@@ -179,6 +196,9 @@ class _HabitDetailsState extends State<HabitDetails> {
       Container(
         margin: EdgeInsets.only(bottom: 40),
         child: TextFormField(
+          onChanged: (value) {
+            this.widget.habit.description = value;
+          },
           decoration: InputDecoration(
             labelText: 'Description (optional)',
             border: OutlineInputBorder(),
