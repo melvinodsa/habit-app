@@ -8,7 +8,6 @@ class Habit {
     this.description = "",
     this.operator = NumericalTrackOperator.Atleast,
     this.goal = 0,
-    this.goalSet = false,
     this.unit = "",
   });
   final Category category;
@@ -17,7 +16,6 @@ class Habit {
   String description;
   NumericalTrackOperator operator;
   int goal;
-  bool goalSet;
   String unit;
 }
 

@@ -17,8 +17,8 @@ class HabitDetails extends StatefulWidget {
 
 class _HabitDetailsState extends State<HabitDetails> {
   bool _isNextButtonEnabled = false;
-  final _goalText = TextEditingController();
   final _nameText = TextEditingController();
+  final _goalText = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,14 +26,18 @@ class _HabitDetailsState extends State<HabitDetails> {
       body: _buildBody(),
     );
   }
+
   @override
   void dispose() {
-    _goalText.dispose();
     _nameText.dispose();
+    _goalText.dispose();
     super.dispose();
   }
 
   bool _areRequiredFieldsAreFilled() {
+    if (_nameText.text.isEmpty) {
+      return false;
+    }
     if (this.widget.habit.name.length == 0) {
       return false;
     }
@@ -41,7 +45,7 @@ class _HabitDetailsState extends State<HabitDetails> {
       return true;
     }
 
-    if (!this.widget.habit.goalSet) {
+    if (_goalText.text.isEmpty) {
       return false;
     }
     return true;
@@ -109,6 +113,7 @@ class _HabitDetailsState extends State<HabitDetails> {
       Container(
         margin: EdgeInsets.only(bottom: 30),
         child: TextFormField(
+          controller: _nameText,
           onChanged: (value) {
             this.widget.habit.name = value;
             updateFieldsCheck();
@@ -147,6 +152,7 @@ class _HabitDetailsState extends State<HabitDetails> {
       Container(
         margin: EdgeInsets.only(bottom: 30),
         child: TextFormField(
+          controller: _nameText,
           onChanged: (value) {
             this.widget.habit.name = value;
             updateFieldsCheck();
@@ -194,14 +200,20 @@ class _HabitDetailsState extends State<HabitDetails> {
             Container(
               width: MediaQuery.of(context).size.width / 2 - 90,
               child: TextFormField(
+                controller: _goalText,
                 onChanged: (value) {
-                  this.widget.habit.goal = int.parse(value);
-                  updateFieldsCheck();
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    updateFieldsCheck();
+                    if (_goalText.text.isNotEmpty) {
+                      this.widget.habit.goal = int.parse(_goalText.text);
+                    }
+                    setState(() {});
+                  });
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
+                // inputFormatters: <TextInputFormatter>[
+                //   FilteringTextInputFormatter.digitsOnly,
+                // ],
                 decoration: InputDecoration(
                   labelText: 'Goal',
                   border: OutlineInputBorder(),
