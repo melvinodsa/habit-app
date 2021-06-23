@@ -16,12 +16,41 @@ class HabitDetails extends StatefulWidget {
 }
 
 class _HabitDetailsState extends State<HabitDetails> {
+  bool _isNextButtonEnabled = false;
+  final _goalText = TextEditingController();
+  final _nameText = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Details")),
       body: _buildBody(),
     );
+  }
+  @override
+  void dispose() {
+    _goalText.dispose();
+    _nameText.dispose();
+    super.dispose();
+  }
+
+  bool _areRequiredFieldsAreFilled() {
+    if (this.widget.habit.name.length == 0) {
+      return false;
+    }
+    if (this.widget.habit.trackProgress == TrackProgress.WithYesOrNo) {
+      return true;
+    }
+
+    if (!this.widget.habit.goalSet) {
+      return false;
+    }
+    return true;
+  }
+
+  updateFieldsCheck() {
+    setState(() {
+      this._isNextButtonEnabled = _areRequiredFieldsAreFilled();
+    });
   }
 
   void Function() _gotoHabitFrequency() {
@@ -82,6 +111,7 @@ class _HabitDetailsState extends State<HabitDetails> {
         child: TextFormField(
           onChanged: (value) {
             this.widget.habit.name = value;
+            updateFieldsCheck();
           },
           decoration: InputDecoration(
             labelText: 'Habit',
@@ -119,6 +149,7 @@ class _HabitDetailsState extends State<HabitDetails> {
         child: TextFormField(
           onChanged: (value) {
             this.widget.habit.name = value;
+            updateFieldsCheck();
           },
           decoration: InputDecoration(
             labelText: 'Habit',
@@ -135,10 +166,11 @@ class _HabitDetailsState extends State<HabitDetails> {
               width: MediaQuery.of(context).size.width / 2 - 90,
               margin: EdgeInsets.only(right: 10),
               child: DropdownButtonFormField(
-                value: "1",
+                value: NumericalTrackOperator.Atleast.toEnumString(),
                 onChanged: (val) => {
                   this.widget.habit.operator =
-                      parseNumericalTrackOperator(val.toString())
+                      parseNumericalTrackOperator(val.toString()),
+                  updateFieldsCheck()
                 },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -164,6 +196,7 @@ class _HabitDetailsState extends State<HabitDetails> {
               child: TextFormField(
                 onChanged: (value) {
                   this.widget.habit.goal = int.parse(value);
+                  updateFieldsCheck();
                 },
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -223,14 +256,14 @@ class _HabitDetailsState extends State<HabitDetails> {
 
   Widget _buildNextButton() {
     return Container(
-      width: MediaQuery.of(context).size.width - 80,
-      child: ElevatedButton(
-        onPressed: _gotoHabitFrequency(),
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.only(top: 20, bottom: 20),
-        ),
-        child: Text("Next"),
-      ),
-    );
+        width: MediaQuery.of(context).size.width - 80,
+        child: ElevatedButton(
+          onPressed: this._isNextButtonEnabled ? _gotoHabitFrequency() : null,
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.only(top: 20, bottom: 20),
+            // textStyle: TextStyle(color: theme.disabledColor)
+          ),
+          child: Text("Next"),
+        ));
   }
 }
