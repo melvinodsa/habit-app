@@ -56,60 +56,111 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     return Container(
       margin: EdgeInsets.only(bottom: 40),
       child: Column(
-        children: <Widget>[
-          ListTile(
-            title: const Text('Everyday'),
-            leading: Radio<Frequency>(
-              value: Frequency.Everyday,
-              groupValue: _frequency,
-              onChanged: (Frequency? value) {
-                setState(() {
-                  _frequency = value;
-                });
-                this.widget.habit.frequency = Frequency.Everyday;
-              },
-            ),
-          ),
-          ListTile(
-            title: const Text('Some days of the week'),
-            leading: Radio<Frequency>(
-              value: Frequency.DaysOfWeek,
-              groupValue: _frequency,
-              onChanged: (Frequency? value) {
-                setState(() {
-                  _frequency = value;
-                });
-                this.widget.habit.frequency = Frequency.DaysOfWeek;
-              },
-            ),
-          ),
-          ListTile(
-            title: const Text('Some times per period'),
-            leading: Radio<Frequency>(
-              value: Frequency.Periodically,
-              groupValue: _frequency,
-              onChanged: (Frequency? value) {
-                setState(() {
-                  _frequency = value;
-                });
-                this.widget.habit.frequency = Frequency.Periodically;
-              },
-            ),
-          ),
-          ListTile(
-            title: const Text('Repeat'),
-            leading: Radio<Frequency>(
-              value: Frequency.Repeat,
-              groupValue: _frequency,
-              onChanged: (Frequency? value) {
-                setState(() {
-                  _frequency = value;
-                });
-                this.widget.habit.frequency = Frequency.Repeat;
-              },
-            ),
-          ),
+        children: [
+          _everydayOption(),
+          _daysOfWeekOption(),
+          _periodicOption(),
+          _repeatOption(),
         ],
+      ),
+    );
+  }
+
+  ListTile _repeatOption() {
+    return ListTile(
+      title: const Text('Repeat'),
+      leading: Radio<Frequency>(
+        value: Frequency.Repeat,
+        groupValue: _frequency,
+        onChanged: (Frequency? value) {
+          setState(() {
+            _frequency = value;
+          });
+          this.widget.habit.frequency = Frequency.Repeat;
+        },
+      ),
+    );
+  }
+
+  ListTile _periodicOption() {
+    return ListTile(
+      title: const Text('Some times per period'),
+      leading: Radio<Frequency>(
+        value: Frequency.Periodically,
+        groupValue: _frequency,
+        onChanged: (Frequency? value) {
+          setState(() {
+            _frequency = value;
+          });
+          this.widget.habit.frequency = Frequency.Periodically;
+        },
+      ),
+    );
+  }
+
+  Widget _daysOfWeekOption() {
+    // var isDaysOfWeek = _frequency == Frequency.DaysOfWeek;
+    return ExpansionPanelList.radio(
+        expansionCallback: (expIndex, expanded) => {
+              setState(() {
+                if (expanded) {
+                  _frequency = Frequency.DaysOfWeek;
+                  this.widget.habit.frequency = Frequency.DaysOfWeek;
+                }
+              })
+            },
+        children: [
+          ExpansionPanelRadio(
+              value: Frequency.DaysOfWeek,
+              headerBuilder: _getDaysOfWeekTitle,
+              body: Row(
+                children: _getDaysOfWeek(),
+              ))
+        ]);
+  }
+
+  Widget _getDaysOfWeekTitle(BuildContext context, bool isOpen) {
+    return ListTile(
+      title: Text('Some days of the week'),
+      leading: Radio<Frequency>(
+        value: Frequency.DaysOfWeek,
+        groupValue: _frequency,
+        onChanged: (Frequency? value) {
+          setState(() {
+            _frequency = value;
+          });
+          this.widget.habit.frequency = Frequency.DaysOfWeek;
+        },
+      ),
+    );
+  }
+
+  List<Widget> _getDaysOfWeek() {
+    return <Widget>[
+      CheckboxListTile(
+        title: Text('Monday'),
+        value: false,
+        onChanged: (bool? value) {
+          setState(() {
+            // isChecked = value!;
+          });
+        },
+      )
+    ];
+  }
+
+  ListTile _everydayOption() {
+    return ListTile(
+      title: const Text('Everyday'),
+      leading: Radio<Frequency>(
+        value: Frequency.Everyday,
+        groupValue: _frequency,
+        onChanged: (Frequency? value) {
+          setState(() {
+            _frequency = value;
+          });
+          this.widget.habit.frequency = Frequency.Everyday;
+        },
       ),
     );
   }
