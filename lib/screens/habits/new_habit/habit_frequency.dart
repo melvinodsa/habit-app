@@ -14,6 +14,7 @@ class HabitFrequency extends StatefulWidget {
 }
 
 class _HabitFrequencyState extends State<HabitFrequency> {
+  Frequency? _frequency = Frequency.Everyday;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +53,64 @@ class _HabitFrequencyState extends State<HabitFrequency> {
   }
 
   Widget _buildInputs() {
-    return Column(
-      children: [],
+    return Container(
+      margin: EdgeInsets.only(bottom: 40),
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            title: const Text('Everyday'),
+            leading: Radio<Frequency>(
+              value: Frequency.Everyday,
+              groupValue: _frequency,
+              onChanged: (Frequency? value) {
+                setState(() {
+                  _frequency = value;
+                });
+                this.widget.habit.frequency = Frequency.Everyday;
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text('Some days of the week'),
+            leading: Radio<Frequency>(
+              value: Frequency.DaysOfWeek,
+              groupValue: _frequency,
+              onChanged: (Frequency? value) {
+                setState(() {
+                  _frequency = value;
+                });
+                this.widget.habit.frequency = Frequency.DaysOfWeek;
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text('Some times per period'),
+            leading: Radio<Frequency>(
+              value: Frequency.Periodically,
+              groupValue: _frequency,
+              onChanged: (Frequency? value) {
+                setState(() {
+                  _frequency = value;
+                });
+                this.widget.habit.frequency = Frequency.Periodically;
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text('Repeat'),
+            leading: Radio<Frequency>(
+              value: Frequency.Repeat,
+              groupValue: _frequency,
+              onChanged: (Frequency? value) {
+                setState(() {
+                  _frequency = value;
+                });
+                this.widget.habit.frequency = Frequency.Repeat;
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -9,6 +9,7 @@ class Habit {
     this.operator = NumericalTrackOperator.Atleast,
     this.goal = 0,
     this.unit = "",
+    this.frequency = Frequency.Everyday,
   });
   final Category category;
   TrackProgress trackProgress;
@@ -17,6 +18,7 @@ class Habit {
   NumericalTrackOperator operator;
   int goal;
   String unit;
+  Frequency frequency;
 }
 
 class Category {
@@ -56,4 +58,11 @@ extension ExtensionOperator on NumericalTrackOperator {
         return "1";
     }
   }
+}
+
+enum Frequency {
+  Everyday,
+  DaysOfWeek,
+  Periodically,
+  Repeat,
 }
