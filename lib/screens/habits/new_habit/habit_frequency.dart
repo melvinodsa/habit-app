@@ -67,59 +67,54 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  ListTile _repeatOption() {
-    return ListTile(
+  RadioListTile _repeatOption() {
+    return RadioListTile(
       title: const Text('Repeat'),
-      leading: Radio<Frequency>(
-        value: Frequency.Repeat,
-        groupValue: _frequency,
-        onChanged: (Frequency? value) {
-          setState(() {
-            _frequency = value;
-            _isDaysOfWeekVisible = false;
-          });
-          this.widget.habit.frequency = Frequency.Repeat;
-        },
-      ),
+      value: Frequency.Repeat,
+      groupValue: _frequency,
+      onChanged: (value) {
+        setState(() {
+          _frequency = value;
+          _isDaysOfWeekVisible = false;
+        });
+        this.widget.habit.frequency = Frequency.Repeat;
+      },
     );
   }
 
-  ListTile _periodicOption() {
-    return ListTile(
+  RadioListTile _periodicOption() {
+    return RadioListTile(
       title: const Text('Some times per period'),
-      leading: Radio<Frequency>(
-        value: Frequency.Periodically,
-        groupValue: _frequency,
-        onChanged: (Frequency? value) {
-          setState(() {
-            _frequency = value;
-            _isDaysOfWeekVisible = false;
-          });
-          this.widget.habit.frequency = Frequency.Periodically;
-        },
-      ),
+      value: Frequency.Periodically,
+      groupValue: _frequency,
+      onChanged: (value) {
+        setState(() {
+          _frequency = value;
+          _isDaysOfWeekVisible = false;
+        });
+        this.widget.habit.frequency = Frequency.Periodically;
+      },
     );
   }
 
   Widget _daysOfWeekOption() {
     return Column(
       children: [
-        ListTile(
+        RadioListTile(
           title: const Text('Some days of the week'),
-          leading: Radio<Frequency>(
-            value: Frequency.DaysOfWeek,
-            groupValue: _frequency,
-            onChanged: (Frequency? value) {
-              setState(() {
-                _frequency = value;
-                _isDaysOfWeekVisible = true;
-              });
-              this.widget.habit.frequency = Frequency.DaysOfWeek;
-            },
-          ),
+          value: Frequency.DaysOfWeek,
+          groupValue: _frequency,
+          onChanged: (Frequency? value) {
+            setState(() {
+              _frequency = value;
+              _isDaysOfWeekVisible = true;
+            });
+            this.widget.habit.frequency = Frequency.DaysOfWeek;
+          },
         ),
         AnimatedSwitcher(
-          duration: Duration(milliseconds: 100),
+          duration: Duration(milliseconds: 300),
+          transitionBuilder: _daysOfWeekTransitionBuilder,
           child: _isDaysOfWeekVisible
               ? _buildDaysOfWeek()
               : Container(
@@ -131,20 +126,18 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  ListTile _everydayOption() {
-    return ListTile(
-      title: const Text('Everyday'),
-      leading: Radio<Frequency>(
-        value: Frequency.Everyday,
-        groupValue: _frequency,
-        onChanged: (Frequency? value) {
-          setState(() {
-            _frequency = value;
-            _isDaysOfWeekVisible = false;
-          });
-          this.widget.habit.frequency = Frequency.Everyday;
-        },
-      ),
+  RadioListTile _everydayOption() {
+    return RadioListTile(
+      title: Text('Everyday'),
+      value: Frequency.Everyday,
+      groupValue: _frequency,
+      onChanged: (value) {
+        setState(() {
+          _frequency = value;
+          _isDaysOfWeekVisible = false;
+        });
+        this.widget.habit.frequency = Frequency.Everyday;
+      },
     );
   }
 
@@ -164,14 +157,25 @@ class _HabitFrequencyState extends State<HabitFrequency> {
   Widget _buildDaysOfWeek() {
     return Wrap(
       children: [
+        _buildDayOfWeek('Sunday'),
         _buildDayOfWeek('Monday'),
         _buildDayOfWeek('Tuesday'),
         _buildDayOfWeek('Wednesday'),
         _buildDayOfWeek('Thursday'),
         _buildDayOfWeek('Friday'),
         _buildDayOfWeek('Saturday'),
-        _buildDayOfWeek('Sunday'),
       ],
+    );
+  }
+
+  Widget _daysOfWeekTransitionBuilder(
+      Widget child, Animation<double> animation) {
+    final offsetAnimation =
+        Tween<Offset>(begin: Offset(0.0, -0.5), end: Offset(0.0, 0.0))
+            .animate(animation);
+    return SlideTransition(
+      position: offsetAnimation,
+      child: child,
     );
   }
 
