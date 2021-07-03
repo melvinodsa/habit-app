@@ -112,9 +112,10 @@ class _HabitFrequencyState extends State<HabitFrequency> {
             this.widget.habit.frequency = Frequency.DaysOfWeek;
           },
         ),
-        AnimatedSwitcher(
+        AnimatedContainer(
           duration: Duration(milliseconds: 300),
-          transitionBuilder: _daysOfWeekTransitionBuilder,
+          curve: Curves.easeInOut,
+          height: _isDaysOfWeekVisible ? 100 : 0,
           child: _isDaysOfWeekVisible
               ? _buildDaysOfWeek()
               : Container(
