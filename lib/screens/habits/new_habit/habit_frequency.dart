@@ -15,6 +15,7 @@ class HabitFrequency extends StatefulWidget {
 
 class _HabitFrequencyState extends State<HabitFrequency> {
   Frequency? _frequency = Frequency.Everyday;
+  bool _isDaysOfWeekVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +76,7 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         onChanged: (Frequency? value) {
           setState(() {
             _frequency = value;
+            _isDaysOfWeekVisible = false;
           });
           this.widget.habit.frequency = Frequency.Repeat;
         },
@@ -91,6 +93,7 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         onChanged: (Frequency? value) {
           setState(() {
             _frequency = value;
+            _isDaysOfWeekVisible = false;
           });
           this.widget.habit.frequency = Frequency.Periodically;
         },
@@ -99,18 +102,32 @@ class _HabitFrequencyState extends State<HabitFrequency> {
   }
 
   Widget _daysOfWeekOption() {
-    return ListTile(
-      title: const Text('Some days of the week'),
-      leading: Radio<Frequency>(
-        value: Frequency.DaysOfWeek,
-        groupValue: _frequency,
-        onChanged: (Frequency? value) {
-          setState(() {
-            _frequency = value;
-          });
-          this.widget.habit.frequency = Frequency.DaysOfWeek;
-        },
-      ),
+    return Column(
+      children: [
+        ListTile(
+          title: const Text('Some days of the week'),
+          leading: Radio<Frequency>(
+            value: Frequency.DaysOfWeek,
+            groupValue: _frequency,
+            onChanged: (Frequency? value) {
+              setState(() {
+                _frequency = value;
+                _isDaysOfWeekVisible = true;
+              });
+              this.widget.habit.frequency = Frequency.DaysOfWeek;
+            },
+          ),
+        ),
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 100),
+          child: _isDaysOfWeekVisible
+              ? _buildDaysOfWeek()
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+        )
+      ],
     );
   }
 
@@ -123,6 +140,7 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         onChanged: (Frequency? value) {
           setState(() {
             _frequency = value;
+            _isDaysOfWeekVisible = false;
           });
           this.widget.habit.frequency = Frequency.Everyday;
         },
@@ -139,6 +157,34 @@ class _HabitFrequencyState extends State<HabitFrequency> {
           padding: EdgeInsets.only(top: 20, bottom: 20),
         ),
         child: Text("Next"),
+      ),
+    );
+  }
+
+  Widget _buildDaysOfWeek() {
+    return Wrap(
+      children: [
+        _buildDayOfWeek('Monday'),
+        _buildDayOfWeek('Tuesday'),
+        _buildDayOfWeek('Wednesday'),
+        _buildDayOfWeek('Thursday'),
+        _buildDayOfWeek('Friday'),
+        _buildDayOfWeek('Saturday'),
+        _buildDayOfWeek('Sunday'),
+      ],
+    );
+  }
+
+  SizedBox _buildDayOfWeek(String _day) {
+    return SizedBox(
+      width: 180,
+      child: CheckboxListTile(
+        value: false,
+        controlAffinity: ListTileControlAffinity.leading,
+        title: Text(_day),
+        onChanged: (bool? value) {
+          setState(() {});
+        },
       ),
     );
   }
