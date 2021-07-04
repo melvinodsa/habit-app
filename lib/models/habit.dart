@@ -9,8 +9,9 @@ class Habit {
     this.operator = NumericalTrackOperator.Atleast,
     this.goal = 0,
     this.unit = "",
-    this.frequency = Frequency.Everyday,
-  });
+  }) {
+    this.frequency = Frequency(type: FrequencyType.Everyday);
+  }
   final Category category;
   TrackProgress trackProgress;
   String name;
@@ -18,7 +19,7 @@ class Habit {
   NumericalTrackOperator operator;
   int goal;
   String unit;
-  Frequency frequency;
+  late Frequency frequency;
 }
 
 class Category {
@@ -60,9 +61,71 @@ extension ExtensionOperator on NumericalTrackOperator {
   }
 }
 
-enum Frequency {
+enum FrequencyType {
   Everyday,
   DaysOfWeek,
   Periodically,
   Repeat,
+}
+
+class Frequency {
+  Frequency(
+      {required this.type, this.period = 2, this.repeatPer = Repeat.Week}) {
+    this.weekdays = [];
+  }
+  FrequencyType type;
+  late List<Weekday> weekdays;
+  int period;
+  Repeat repeatPer;
+}
+
+enum Weekday {
+  Sunday,
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+}
+
+extension ExtensionWeekday on Weekday {
+  String toEnumString() {
+    switch (this) {
+      case Weekday.Sunday:
+        return "Sunday";
+      case Weekday.Monday:
+        return "Monday";
+      case Weekday.Tuesday:
+        return "Tuesday";
+      case Weekday.Wednesday:
+        return "Wednesday";
+      case Weekday.Thursday:
+        return "Thursday";
+      case Weekday.Friday:
+        return "Friday";
+      case Weekday.Saturday:
+        return "Saturday";
+      default:
+        return "Sunday";
+    }
+  }
+}
+
+enum Repeat {
+  Week,
+  Month,
+}
+
+extension RepeatExtension on Repeat {
+  String toEnumString() {
+    switch (this) {
+      case Repeat.Week:
+        return "Week";
+      case Repeat.Month:
+        return "Month";
+      default:
+        return "Week";
+    }
+  }
 }

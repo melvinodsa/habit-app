@@ -14,9 +14,11 @@ class HabitFrequency extends StatefulWidget {
 }
 
 class _HabitFrequencyState extends State<HabitFrequency> {
-  Frequency? _frequency = Frequency.Everyday;
+  FrequencyType? _frequency = FrequencyType.Everyday;
   final _timePerWeek = TextEditingController(text: "1");
-  final _repeatFrequency = TextEditingController(text: "1");
+  final _repeatFrequency = TextEditingController(text: "2");
+  bool _isNextButtonEnabled = true;
+  String _errorMessage = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +31,18 @@ class _HabitFrequencyState extends State<HabitFrequency> {
   void dispose() {
     _timePerWeek.dispose();
     super.dispose();
+  }
+
+  void Function() _gotoWhenScreen() {
+    return () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HabitFrequency(
+                  config: this.widget.config, habit: this.widget.habit),
+            ),
+          )
+        };
   }
 
   Widget _buildBody() {
@@ -74,17 +88,42 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
+  Widget _buildNextButton() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: 20),
+          child: Text(
+            _errorMessage,
+            style: TextStyle(color: Colors.redAccent),
+          ),
+        ),
+        Container(
+            width: MediaQuery.of(context).size.width - 80,
+            child: ElevatedButton(
+              onPressed: this._isNextButtonEnabled ? _gotoWhenScreen() : null,
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.only(top: 20, bottom: 20),
+              ),
+              child: Text("Next"),
+            )),
+      ],
+    );
+  }
+
   RadioListTile _everydayOption() {
     return RadioListTile(
       title: Text('Everyday'),
-      value: Frequency.Everyday,
+      value: FrequencyType.Everyday,
       groupValue: _frequency,
       onChanged: (value) {
         setState(() {
           _frequency = value;
+          _isNextButtonEnabled = true;
+          _errorMessage = "";
         });
 
-        this.widget.habit.frequency = Frequency.Everyday;
+        this.widget.habit.frequency.type = FrequencyType.Everyday;
       },
     );
   }
@@ -94,20 +133,24 @@ class _HabitFrequencyState extends State<HabitFrequency> {
       children: [
         RadioListTile(
           title: const Text('Some days of the week'),
-          value: Frequency.DaysOfWeek,
+          value: FrequencyType.DaysOfWeek,
           groupValue: _frequency,
-          onChanged: (Frequency? value) {
+          onChanged: (FrequencyType? value) {
             setState(() {
               _frequency = value;
+              _isNextButtonEnabled =
+                  this.widget.habit.frequency.weekdays.isNotEmpty;
+              _errorMessage =
+                  _isNextButtonEnabled ? "" : "Select atleast a day";
             });
-            this.widget.habit.frequency = Frequency.DaysOfWeek;
+            this.widget.habit.frequency.type = FrequencyType.DaysOfWeek;
           },
         ),
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: _frequency == Frequency.DaysOfWeek ? 100 : 0,
-          child: _frequency == Frequency.DaysOfWeek
+          height: _frequency == FrequencyType.DaysOfWeek ? 100 : 0,
+          child: _frequency == FrequencyType.DaysOfWeek
               ? _buildDaysOfWeek()
               : Container(
                   height: 0,
@@ -123,20 +166,24 @@ class _HabitFrequencyState extends State<HabitFrequency> {
       children: [
         RadioListTile(
           title: const Text('Some times per period'),
-          value: Frequency.Periodically,
+          value: FrequencyType.Periodically,
           groupValue: _frequency,
-          onChanged: (Frequency? value) {
+          onChanged: (FrequencyType? value) {
             setState(() {
               _frequency = value;
+              _isNextButtonEnabled = true;
+              _errorMessage = "";
             });
-            this.widget.habit.frequency = Frequency.Periodically;
+            this.widget.habit.frequency.type = FrequencyType.Periodically;
+            this.widget.habit.frequency.period = 1;
+            this.widget.habit.frequency.repeatPer = Repeat.Week;
           },
         ),
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: _frequency == Frequency.Periodically ? 70 : 0,
-          child: _frequency == Frequency.Periodically
+          height: _frequency == FrequencyType.Periodically ? 70 : 0,
+          child: _frequency == FrequencyType.Periodically
               ? _buildPeriodic()
               : Container(
                   height: 0,
@@ -152,20 +199,23 @@ class _HabitFrequencyState extends State<HabitFrequency> {
       children: [
         RadioListTile(
           title: const Text('Repeat'),
-          value: Frequency.Repeat,
+          value: FrequencyType.Repeat,
           groupValue: _frequency,
-          onChanged: (Frequency? value) {
+          onChanged: (FrequencyType? value) {
             setState(() {
               _frequency = value;
+              _isNextButtonEnabled = true;
+              _errorMessage = "";
             });
-            this.widget.habit.frequency = Frequency.Repeat;
+            this.widget.habit.frequency.type = FrequencyType.Repeat;
+            this.widget.habit.frequency.period = 2;
           },
         ),
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: _frequency == Frequency.Repeat ? 70 : 0,
-          child: _frequency == Frequency.Repeat
+          height: _frequency == FrequencyType.Repeat ? 70 : 0,
+          child: _frequency == FrequencyType.Repeat
               ? _buildRepeat()
               : Container(
                   height: 0,
@@ -176,42 +226,30 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  Widget _buildNextButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width - 80,
-      child: ElevatedButton(
-        onPressed: () => {},
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.only(top: 20, bottom: 20),
-        ),
-        child: Text("Next"),
-      ),
-    );
-  }
-
   Widget _buildDaysOfWeek() {
     return Wrap(
-      children: [
-        _buildDayOfWeek('Sunday'),
-        _buildDayOfWeek('Monday'),
-        _buildDayOfWeek('Tuesday'),
-        _buildDayOfWeek('Wednesday'),
-        _buildDayOfWeek('Thursday'),
-        _buildDayOfWeek('Friday'),
-        _buildDayOfWeek('Saturday'),
-      ],
+      children: Weekday.values.map((e) => _buildDayOfWeek(e)).toList(),
     );
   }
 
-  SizedBox _buildDayOfWeek(String _day) {
+  SizedBox _buildDayOfWeek(Weekday _day) {
     return SizedBox(
       width: 180,
       child: CheckboxListTile(
-        value: false,
+        value: this.widget.habit.frequency.weekdays.contains(_day),
         controlAffinity: ListTileControlAffinity.leading,
-        title: Text(_day),
+        title: Text(_day.toEnumString()),
         onChanged: (bool? value) {
-          setState(() {});
+          setState(() {
+            if (value == null || !value) {
+              this.widget.habit.frequency.weekdays.remove(_day);
+            } else {
+              this.widget.habit.frequency.weekdays.add(_day);
+            }
+            _isNextButtonEnabled =
+                this.widget.habit.frequency.weekdays.isNotEmpty;
+            _errorMessage = _isNextButtonEnabled ? "" : "Select atleast a day";
+          });
         },
       ),
     );
@@ -233,8 +271,20 @@ class _HabitFrequencyState extends State<HabitFrequency> {
               textAlign: TextAlign.center,
               onChanged: (value) {
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  if (_timePerWeek.text.isNotEmpty) {}
-                  setState(() {});
+                  bool nextBtnEnabled = false;
+                  if (_timePerWeek.text.isNotEmpty) {
+                    int period = int.parse(_timePerWeek.text);
+                    if (period >= 1) {
+                      this.widget.habit.frequency.period = period;
+                      nextBtnEnabled = true;
+                    }
+                  }
+                  setState(() {
+                    _isNextButtonEnabled = nextBtnEnabled;
+                    _errorMessage = _isNextButtonEnabled
+                        ? ""
+                        : "frequency should be atleast 1";
+                  });
                 });
               },
               keyboardType: TextInputType.number,
@@ -246,18 +296,21 @@ class _HabitFrequencyState extends State<HabitFrequency> {
           SizedBox(
             width: 80,
             child: DropdownButtonFormField(
-              value: "Week",
-              onChanged: (val) => {},
-              items: [
-                DropdownMenuItem(
-                  value: "Week",
-                  child: Text("Week"),
-                ),
-                DropdownMenuItem(
-                  value: "Month",
-                  child: Text("Month"),
-                ),
-              ],
+              value: Repeat.Week,
+              onChanged: (Repeat? val) => {
+                if (val is Repeat)
+                  {
+                    setState(() {
+                      this.widget.habit.frequency.repeatPer = val;
+                    })
+                  }
+              },
+              items: Repeat.values
+                  .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e.toEnumString()),
+                      ))
+                  .toList(),
             ),
           )
         ],
@@ -284,8 +337,20 @@ class _HabitFrequencyState extends State<HabitFrequency> {
               textAlign: TextAlign.center,
               onChanged: (value) {
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  if (_repeatFrequency.text.isNotEmpty) {}
-                  setState(() {});
+                  bool nextBtnEnabled = false;
+                  if (_repeatFrequency.text.isNotEmpty) {
+                    int period = int.parse(_repeatFrequency.text);
+                    if (period >= 2) {
+                      this.widget.habit.frequency.period = period;
+                      nextBtnEnabled = true;
+                    }
+                  }
+                  setState(() {
+                    _isNextButtonEnabled = nextBtnEnabled;
+                    _errorMessage = _isNextButtonEnabled
+                        ? ""
+                        : "frequency should be atleast 2";
+                  });
                 });
               },
               keyboardType: TextInputType.number,
