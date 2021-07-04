@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/habit.dart';
+import 'package:habit/screens/habits/new_habit/habit_when.dart';
 
 class HabitFrequency extends StatefulWidget {
   HabitFrequency({Key? key, required this.config, required this.habit})
@@ -38,7 +39,7 @@ class _HabitFrequencyState extends State<HabitFrequency> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HabitFrequency(
+              builder: (context) => HabitWhen(
                   config: this.widget.config, habit: this.widget.habit),
             ),
           )

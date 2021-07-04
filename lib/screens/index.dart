@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/card_data.dart';
 import 'package:habit/models/habit.dart';
-import 'package:habit/screens/habits/new_habit/habit_frequency.dart';
+import 'package:habit/screens/habits/new_habit/habit_when.dart';
 
 class Screens extends StatelessWidget {
   Screens({required this.config});
@@ -13,7 +13,7 @@ class Screens extends StatelessWidget {
       title: 'Habits',
       debugShowCheckedModeBanner: false,
       theme: config.theme,
-      home: HabitFrequency(
+      home: HabitWhen(
         config: config,
         habit: Habit(
             category: Category(
