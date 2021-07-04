@@ -275,7 +275,7 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: 0, right: 20),
               child: Text("Every")),
           SizedBox(
             width: 40,
