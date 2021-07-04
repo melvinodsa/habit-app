@@ -15,13 +15,19 @@ class HabitFrequency extends StatefulWidget {
 
 class _HabitFrequencyState extends State<HabitFrequency> {
   Frequency? _frequency = Frequency.Everyday;
-  bool _isDaysOfWeekVisible = false;
+  final _timePerWeek = TextEditingController(text: "1");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Frequency")),
       body: _buildBody(),
     );
+  }
+
+  @override
+  void dispose() {
+    _timePerWeek.dispose();
+    super.dispose();
   }
 
   Widget _buildBody() {
@@ -67,32 +73,17 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  RadioListTile _repeatOption() {
+  RadioListTile _everydayOption() {
     return RadioListTile(
-      title: const Text('Repeat'),
-      value: Frequency.Repeat,
+      title: Text('Everyday'),
+      value: Frequency.Everyday,
       groupValue: _frequency,
       onChanged: (value) {
         setState(() {
           _frequency = value;
-          _isDaysOfWeekVisible = false;
         });
-        this.widget.habit.frequency = Frequency.Repeat;
-      },
-    );
-  }
 
-  RadioListTile _periodicOption() {
-    return RadioListTile(
-      title: const Text('Some times per period'),
-      value: Frequency.Periodically,
-      groupValue: _frequency,
-      onChanged: (value) {
-        setState(() {
-          _frequency = value;
-          _isDaysOfWeekVisible = false;
-        });
-        this.widget.habit.frequency = Frequency.Periodically;
+        this.widget.habit.frequency = Frequency.Everyday;
       },
     );
   }
@@ -107,7 +98,6 @@ class _HabitFrequencyState extends State<HabitFrequency> {
           onChanged: (Frequency? value) {
             setState(() {
               _frequency = value;
-              _isDaysOfWeekVisible = true;
             });
             this.widget.habit.frequency = Frequency.DaysOfWeek;
           },
@@ -115,8 +105,8 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: _isDaysOfWeekVisible ? 100 : 0,
-          child: _isDaysOfWeekVisible
+          height: _frequency == Frequency.DaysOfWeek ? 100 : 0,
+          child: _frequency == Frequency.DaysOfWeek
               ? _buildDaysOfWeek()
               : Container(
                   height: 0,
@@ -127,17 +117,45 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  RadioListTile _everydayOption() {
+  Widget _periodicOption() {
+    return Column(
+      children: [
+        RadioListTile(
+          title: const Text('Some times per period'),
+          value: Frequency.Periodically,
+          groupValue: _frequency,
+          onChanged: (Frequency? value) {
+            setState(() {
+              _frequency = value;
+            });
+            this.widget.habit.frequency = Frequency.Periodically;
+          },
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          height: _frequency == Frequency.Periodically ? 70 : 0,
+          child: _frequency == Frequency.Periodically
+              ? _buildPeriodic()
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+        )
+      ],
+    );
+  }
+
+  RadioListTile _repeatOption() {
     return RadioListTile(
-      title: Text('Everyday'),
-      value: Frequency.Everyday,
+      title: const Text('Repeat'),
+      value: Frequency.Repeat,
       groupValue: _frequency,
       onChanged: (value) {
         setState(() {
           _frequency = value;
-          _isDaysOfWeekVisible = false;
         });
-        this.widget.habit.frequency = Frequency.Everyday;
+        this.widget.habit.frequency = Frequency.Repeat;
       },
     );
   }
@@ -169,17 +187,6 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  Widget _daysOfWeekTransitionBuilder(
-      Widget child, Animation<double> animation) {
-    final offsetAnimation =
-        Tween<Offset>(begin: Offset(0.0, -0.5), end: Offset(0.0, 0.0))
-            .animate(animation);
-    return SlideTransition(
-      position: offsetAnimation,
-      child: child,
-    );
-  }
-
   SizedBox _buildDayOfWeek(String _day) {
     return SizedBox(
       width: 180,
@@ -190,6 +197,54 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         onChanged: (bool? value) {
           setState(() {});
         },
+      ),
+    );
+  }
+
+  Widget _buildPeriodic() {
+    return Container(
+      padding: EdgeInsets.only(right: 16, left: 68),
+      margin: EdgeInsets.only(bottom: 10),
+      width: MediaQuery.of(context).size.width - 80,
+      height: 70,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 40,
+            child: TextFormField(
+              controller: _timePerWeek,
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  if (_timePerWeek.text.isNotEmpty) {}
+                  setState(() {});
+                });
+              },
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Text("times per")),
+          SizedBox(
+            width: 80,
+            child: DropdownButtonFormField(
+              value: "Week",
+              onChanged: (val) => {},
+              items: [
+                DropdownMenuItem(
+                  value: "Week",
+                  child: Text("Week"),
+                ),
+                DropdownMenuItem(
+                  value: "Month",
+                  child: Text("Month"),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
