@@ -16,6 +16,7 @@ class HabitFrequency extends StatefulWidget {
 class _HabitFrequencyState extends State<HabitFrequency> {
   Frequency? _frequency = Frequency.Everyday;
   final _timePerWeek = TextEditingController(text: "1");
+  final _repeatFrequency = TextEditingController(text: "1");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,17 +147,32 @@ class _HabitFrequencyState extends State<HabitFrequency> {
     );
   }
 
-  RadioListTile _repeatOption() {
-    return RadioListTile(
-      title: const Text('Repeat'),
-      value: Frequency.Repeat,
-      groupValue: _frequency,
-      onChanged: (value) {
-        setState(() {
-          _frequency = value;
-        });
-        this.widget.habit.frequency = Frequency.Repeat;
-      },
+  Widget _repeatOption() {
+    return Column(
+      children: [
+        RadioListTile(
+          title: const Text('Repeat'),
+          value: Frequency.Repeat,
+          groupValue: _frequency,
+          onChanged: (Frequency? value) {
+            setState(() {
+              _frequency = value;
+            });
+            this.widget.habit.frequency = Frequency.Repeat;
+          },
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          height: _frequency == Frequency.Repeat ? 70 : 0,
+          child: _frequency == Frequency.Repeat
+              ? _buildRepeat()
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+        )
+      ],
     );
   }
 
@@ -244,6 +260,40 @@ class _HabitFrequencyState extends State<HabitFrequency> {
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRepeat() {
+    return Container(
+      padding: EdgeInsets.only(right: 16, left: 68),
+      margin: EdgeInsets.only(bottom: 10),
+      width: MediaQuery.of(context).size.width - 80,
+      height: 70,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Text("Every")),
+          SizedBox(
+            width: 40,
+            child: TextFormField(
+              controller: _repeatFrequency,
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  if (_repeatFrequency.text.isNotEmpty) {}
+                  setState(() {});
+                });
+              },
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Text("day")),
         ],
       ),
     );
