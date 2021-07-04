@@ -129,6 +129,10 @@ class _HabitFrequencyState extends State<HabitFrequency> {
   }
 
   Widget _daysOfWeekOption() {
+    int noOfRows = ((Weekday.values.length * 140) /
+            (MediaQuery.of(context).size.width - 80).round())
+        .round();
+    double height = noOfRows * 70;
     return Column(
       children: [
         RadioListTile(
@@ -149,7 +153,7 @@ class _HabitFrequencyState extends State<HabitFrequency> {
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: _frequency == FrequencyType.DaysOfWeek ? 100 : 0,
+          height: _frequency == FrequencyType.DaysOfWeek ? height : 0,
           child: _frequency == FrequencyType.DaysOfWeek
               ? _buildDaysOfWeek()
               : Container(
@@ -234,11 +238,16 @@ class _HabitFrequencyState extends State<HabitFrequency> {
 
   SizedBox _buildDayOfWeek(Weekday _day) {
     return SizedBox(
-      width: 180,
+      width: 140,
       child: CheckboxListTile(
         value: this.widget.habit.frequency.weekdays.contains(_day),
         controlAffinity: ListTileControlAffinity.leading,
-        title: Text(_day.toEnumString()),
+        title: Text(
+          _day.toEnumString(),
+          style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(context).textTheme.headline1?.color),
+        ),
         onChanged: (bool? value) {
           setState(() {
             if (value == null || !value) {
