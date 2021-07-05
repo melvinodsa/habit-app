@@ -62,7 +62,11 @@ class _HabitWhenState extends State<HabitWhen> {
     return Container(
       margin: EdgeInsets.only(bottom: 40),
       child: Column(
-        children: [],
+        children: [
+          _startWhenInput(),
+          _endWhenInput(),
+          _priorityInput(),
+        ],
       ),
     );
   }
@@ -87,6 +91,96 @@ class _HabitWhenState extends State<HabitWhen> {
               child: Text("Save"),
             )),
       ],
+    );
+  }
+
+  Widget _startWhenInput() {
+    return InkWell(
+      onTap: () => {},
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Icon(Icons.date_range)),
+                Text("Start date"),
+              ],
+            ),
+            Container(
+              child: Text("Today"),
+              padding:
+                  EdgeInsets.only(top: 10, left: 24, bottom: 10, right: 24),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).accentColor.withAlpha(40),
+                  border: Border.all(color: Theme.of(context).accentColor),
+                  borderRadius: BorderRadius.circular(7)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _endWhenInput() {
+    return InkWell(
+      onTap: () => {},
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Icon(Icons.calendar_today)),
+                Text("Goal date"),
+              ],
+            ),
+            Container(
+              child: Switch(
+                value: false,
+                onChanged: (value) => {},
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _priorityInput() {
+    return InkWell(
+      onTap: () => {},
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Icon(Icons.double_arrow)),
+                Text("Priority"),
+              ],
+            ),
+            Container(
+              child: Text("Normal"),
+              padding:
+                  EdgeInsets.only(top: 10, left: 20, bottom: 10, right: 20),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).accentColor.withAlpha(40),
+                  border: Border.all(color: Theme.of(context).accentColor),
+                  borderRadius: BorderRadius.circular(7)),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
