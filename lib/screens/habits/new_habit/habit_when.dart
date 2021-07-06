@@ -257,9 +257,7 @@ class _HabitWhenState extends State<HabitWhen> {
       child: Row(
         children: [
           InkWell(
-            onTap: () {
-              _openDateWizard(false);
-            },
+            onTap: _openDateWizard(false),
             child: _decoratedText(
                 _today.compareTo(this.widget.habit.endDate!) == 0
                     ? "Today"
