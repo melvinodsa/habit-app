@@ -28,96 +28,16 @@ class _HabitWhenState extends State<HabitWhen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Almost there")),
-      body: _buildBody(),
-    );
-  }
-
-  @override
   void dispose() {
     _endDateDays.dispose();
     super.dispose();
   }
 
-  void _openDateWizard(bool _isStartDate) async {
-    final DateTime? newDate = await showDatePicker(
-      context: context,
-      initialDate: _isStartDate
-          ? this.widget.habit.startDate
-          : this.widget.habit.endDate!,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 10000)),
-      helpText: 'Select a date',
-    );
-    if (newDate != null) {
-      setState(() {
-        if (_isStartDate) {
-          this.widget.habit.startDate = newDate;
-        } else {
-          this.widget.habit.endDate = newDate;
-          _endDateDays.text =
-              newDate.difference(this.widget.habit.startDate).inDays.toString();
-        }
-      });
-    }
-  }
-
-  void _openPriorityWizard() async {
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-              title: Text(
-                "Priority",
-                style: TextStyle(
-                    color: Theme.of(context).accentTextTheme.headline1?.color),
-              ),
-              backgroundColor: Theme.of(context).accentColor,
-              children: [
-                ...Priority.values.map(_buildPriorityOption).toList(),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Container(
-                      padding: EdgeInsets.only(top: 15, left: 30, right: 30),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
-                      ),
-                      child: Center(
-                          child: Text(
-                        "Close",
-                        style: TextStyle(
-                            color: Theme.of(context)
-                                .accentTextTheme
-                                .button
-                                ?.color),
-                      ))),
-                )
-              ]);
-        });
-  }
-
-  InkWell _buildPriorityOption(Priority p) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          this.widget.habit.priority = p;
-        });
-
-        Navigator.pop(context, false);
-      },
-      child: Container(
-        padding: EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30),
-        decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-        ),
-        child: Text(
-          p.toEnumString(),
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Almost there")),
+      body: _buildBody(),
     );
   }
 
@@ -187,70 +107,25 @@ class _HabitWhenState extends State<HabitWhen> {
   }
 
   Widget _startWhenInput() {
-    return InkWell(
-      onTap: () {
-        _openDateWizard(true);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: Icon(Icons.date_range)),
-                Text("Start date"),
-              ],
-            ),
-            _decoratedText(_today.compareTo(this.widget.habit.startDate) == 0
-                ? "Today"
-                : DateFormat('dd MMM yyyy').format(this.widget.habit.startDate))
-          ],
-        ),
-      ),
-    );
+    final valueWidget = _decoratedText(
+        _today.compareTo(this.widget.habit.startDate) == 0
+            ? "Today"
+            : DateFormat('dd MMM yyyy').format(this.widget.habit.startDate));
+    return _buildInputOption(
+        _openDateWizard(true), Icons.date_range, "Start date", valueWidget);
   }
 
   Widget _endWhenInput() {
+    final valueWidget = Container(
+      child: Switch(
+        value: this.widget.habit.endDate != null,
+        onChanged: (value) => {},
+      ),
+    );
     return Column(
       children: [
-        InkWell(
-          onTap: () => {
-            setState(() {
-              if (this.widget.habit.endDate == null) {
-                this.widget.habit.endDate =
-                    this.widget.habit.startDate.add(Duration(days: 60));
-                _endDateDays.text = "60";
-              } else {
-                this.widget.habit.endDate = null;
-              }
-            })
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Icon(Icons.calendar_today)),
-                    Text("Goal date"),
-                  ],
-                ),
-                Container(
-                  child: Switch(
-                    value: this.widget.habit.endDate != null,
-                    onChanged: (value) => {},
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+        _buildInputOption(
+            _expandEndDate(), Icons.calendar_today, "Goal date", valueWidget),
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -267,23 +142,108 @@ class _HabitWhenState extends State<HabitWhen> {
   }
 
   Widget _priorityInput() {
+    final valueWidget =
+        _decoratedText(this.widget.habit.priority.toEnumString());
+    return _buildInputOption(
+        _openPriorityWizard(), Icons.double_arrow, "Priority", valueWidget);
+  }
+
+  GestureTapCallback _openDateWizard(bool _isStartDate) {
+    return () async {
+      final DateTime? newDate = await showDatePicker(
+        context: context,
+        initialDate: _isStartDate
+            ? this.widget.habit.startDate
+            : this.widget.habit.endDate!,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 10000)),
+        helpText: 'Select a date',
+      );
+      if (newDate != null) {
+        setState(() {
+          if (_isStartDate) {
+            this.widget.habit.startDate = newDate;
+          } else {
+            this.widget.habit.endDate = newDate;
+            _endDateDays.text = newDate
+                .difference(this.widget.habit.startDate)
+                .inDays
+                .toString();
+          }
+        });
+      }
+    };
+  }
+
+  GestureTapCallback _expandEndDate() {
+    return () => {
+          setState(() {
+            if (this.widget.habit.endDate == null) {
+              this.widget.habit.endDate =
+                  this.widget.habit.startDate.add(Duration(days: 60));
+              _endDateDays.text = "60";
+            } else {
+              this.widget.habit.endDate = null;
+            }
+          })
+        };
+  }
+
+  GestureTapCallback _openPriorityWizard() {
+    return () async {
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+                title: Text(
+                  "Priority",
+                  style: TextStyle(
+                      color:
+                          Theme.of(context).accentTextTheme.headline1?.color),
+                ),
+                backgroundColor: Theme.of(context).accentColor,
+                children: [
+                  ...Priority.values.map(_buildPriorityOption).toList(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: Container(
+                        padding: EdgeInsets.only(top: 15, left: 30, right: 30),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).accentColor,
+                        ),
+                        child: Center(
+                            child: Text(
+                          "Close",
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .accentTextTheme
+                                  .button
+                                  ?.color),
+                        ))),
+                  )
+                ]);
+          });
+    };
+  }
+
+  InkWell _buildPriorityOption(Priority p) {
     return InkWell(
-      onTap: _openPriorityWizard,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: Icon(Icons.double_arrow)),
-                Text("Priority"),
-              ],
-            ),
-            _decoratedText(this.widget.habit.priority.toEnumString()),
-          ],
+      onTap: () {
+        setState(() {
+          this.widget.habit.priority = p;
+        });
+
+        Navigator.pop(context, false);
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30),
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+        ),
+        child: Text(
+          p.toEnumString(),
         ),
       ),
     );
@@ -351,6 +311,29 @@ class _HabitWhenState extends State<HabitWhen> {
           color: Theme.of(context).accentColor.withAlpha(40),
           border: Border.all(color: Theme.of(context).accentColor),
           borderRadius: BorderRadius.circular(7)),
+    );
+  }
+
+  Widget _buildInputOption(GestureTapCallback? onTap, IconData icon,
+      String label, Widget valueWidget) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(right: 10), child: Icon(icon)),
+                Text(label),
+              ],
+            ),
+            valueWidget
+          ],
+        ),
+      ),
     );
   }
 }
