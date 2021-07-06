@@ -67,33 +67,40 @@ class _HabitWhenState extends State<HabitWhen> {
   void _openPriorityWizard() async {
     await showDialog(
         context: context,
-        builder: (_ctx) {
+        builder: (context) {
           return SimpleDialog(
               title: Text(
                 "Priority",
                 style: TextStyle(
-                    color: Theme.of(_ctx).accentTextTheme.headline1?.color),
+                    color: Theme.of(context).accentTextTheme.headline1?.color),
               ),
-              backgroundColor: Theme.of(_ctx).accentColor,
+              backgroundColor: Theme.of(context).accentColor,
               children: [
-                ...Priority.values
-                    .map((e) => _buildPriorityOption(_ctx, e))
-                    .toList(),
+                ...Priority.values.map(_buildPriorityOption).toList(),
                 InkWell(
                   onTap: () {
                     Navigator.pop(context, false);
                   },
                   child: Container(
+                      padding: EdgeInsets.only(top: 15, left: 30, right: 30),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).accentColor,
                       ),
-                      child: Text("Close")),
+                      child: Center(
+                          child: Text(
+                        "Close",
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .accentTextTheme
+                                .button
+                                ?.color),
+                      ))),
                 )
               ]);
         });
   }
 
-  InkWell _buildPriorityOption(BuildContext _ctx, Priority p) {
+  InkWell _buildPriorityOption(Priority p) {
     return InkWell(
       onTap: () {
         setState(() {
@@ -103,6 +110,7 @@ class _HabitWhenState extends State<HabitWhen> {
         Navigator.pop(context, false);
       },
       child: Container(
+        padding: EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30),
         decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
         ),
