@@ -9,8 +9,11 @@ class Habit {
     this.operator = NumericalTrackOperator.Atleast,
     this.goal = 0,
     this.unit = "",
+    this.priority = Priority.Normal,
   }) {
     this.frequency = Frequency(type: FrequencyType.Everyday);
+    DateTime today = DateTime.now();
+    this.startDate = DateTime(today.year, today.month, today.day);
   }
   final Category category;
   TrackProgress trackProgress;
@@ -20,6 +23,9 @@ class Habit {
   int goal;
   String unit;
   late Frequency frequency;
+  late DateTime startDate;
+  DateTime? endDate;
+  Priority priority;
 }
 
 class Category {
@@ -126,6 +132,23 @@ extension RepeatExtension on Repeat {
         return "Month";
       default:
         return "Week";
+    }
+  }
+}
+
+enum Priority { High, Normal, Low }
+
+extension PriorityExtension on Priority {
+  String toEnumString() {
+    switch (this) {
+      case Priority.High:
+        return "High";
+      case Priority.Normal:
+        return "Normal";
+      case Priority.Low:
+        return "Low";
+      default:
+        return "Normal";
     }
   }
 }
