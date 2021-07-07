@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/models/habit.dart';
+import 'package:habit/services/habit.dart';
 
 class HabitWhen extends StatefulWidget {
   HabitWhen({Key? key, required this.config, required this.habit})
@@ -165,10 +166,14 @@ class _HabitWhenState extends State<HabitWhen> {
             this.widget.habit.startDate = newDate;
           } else {
             this.widget.habit.endDate = newDate;
-            _endDateDays.text = newDate
-                .difference(this.widget.habit.startDate)
-                .inDays
-                .toString();
+            int difference =
+                newDate.difference(this.widget.habit.startDate).inDays;
+            _endDateDays.text = difference.toString();
+
+            _isNextButtonEnabled = difference >= 0;
+            _errorMessage = _isNextButtonEnabled
+                ? ""
+                : "end date should be atleast the start date";
           }
         });
       }
@@ -184,6 +189,8 @@ class _HabitWhenState extends State<HabitWhen> {
               _endDateDays.text = "60";
             } else {
               this.widget.habit.endDate = null;
+              _isNextButtonEnabled = true;
+              _errorMessage = "";
             }
           })
         };
@@ -288,7 +295,7 @@ class _HabitWhenState extends State<HabitWhen> {
                     _isNextButtonEnabled = nextBtnEnabled;
                     _errorMessage = _isNextButtonEnabled
                         ? ""
-                        : "endate should be atleast today";
+                        : "end date should be atleast the start date";
                   });
                 });
               },
