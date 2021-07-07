@@ -2,6 +2,7 @@ import 'card_data.dart';
 
 class Habit {
   Habit({
+    this.id = "",
     required this.category,
     this.trackProgress = TrackProgress.WithNumerical,
     this.name = "",
@@ -15,6 +16,7 @@ class Habit {
     DateTime today = DateTime.now();
     this.startDate = DateTime(today.year, today.month, today.day);
   }
+  final String id;
   final Category category;
   TrackProgress trackProgress;
   String name;
@@ -26,6 +28,24 @@ class Habit {
   late DateTime startDate;
   DateTime? endDate;
   Priority priority;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'category': category.data.toMap(),
+      'trackProgress': trackProgress.toInt(),
+      'name': name,
+    };
+  }
+
+  factory Habit.fromMap(Map<String, dynamic> map) {
+    return Habit(
+      id: map['id'],
+      category: Category(data: CardData.fromMap(map['category'])),
+      trackProgress: map['trackProgress'],
+      name: map['name'],
+    );
+  }
 }
 
 class Category {
@@ -36,6 +56,19 @@ class Category {
 enum TrackProgress {
   WithYesOrNo,
   WithNumerical,
+}
+
+extension TrackProgressExtn on TrackProgress {
+  int toInt() {
+    switch (this) {
+      case TrackProgress.WithYesOrNo:
+        return 0;
+      case TrackProgress.WithNumerical:
+        return 1;
+      default:
+        return 0;
+    }
+  }
 }
 
 enum NumericalTrackOperator {
