@@ -24,16 +24,16 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
   }
 
   void Function() _gotoHabitDetails(TrackProgress progressWith) {
-    this.widget.habit.trackProgress = progressWith;
-    return () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HabitDetails(
-                  config: this.widget.config, habit: this.widget.habit),
-            ),
-          )
-        };
+    return () {
+      this.widget.habit.trackProgress = progressWith;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HabitDetails(
+              config: this.widget.config, habit: this.widget.habit),
+        ),
+      );
+    };
   }
 
   Widget _buildBody() {

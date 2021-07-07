@@ -58,15 +58,15 @@ class _HabitDetailsState extends State<HabitDetails> {
   }
 
   void Function() _gotoHabitFrequency() {
-    return () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HabitFrequency(
-                  config: this.widget.config, habit: this.widget.habit),
-            ),
-          )
-        };
+    return () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HabitFrequency(
+              config: this.widget.config, habit: this.widget.habit),
+        ),
+      );
+    };
   }
 
   Widget _buildBody() {

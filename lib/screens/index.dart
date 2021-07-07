@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit/config/index.dart';
-import 'package:habit/models/card_data.dart';
-import 'package:habit/models/habit.dart';
-import 'package:habit/screens/habits/new_habit/habit_when.dart';
+import 'package:habit/screens/habits/index.dart';
 
 class Screens extends StatelessWidget {
   Screens({required this.config});
@@ -13,15 +11,8 @@ class Screens extends StatelessWidget {
       title: 'Habits',
       debugShowCheckedModeBanner: false,
       theme: config.theme,
-      home: HabitWhen(
+      home: HabitsScreen(
         config: config,
-        habit: Habit(
-            category: Category(
-                data: CardWithIcon(
-                    id: 13,
-                    label: 'Work',
-                    iconData: Icons.work,
-                    color: Colors.brown))),
       ),
     );
   }

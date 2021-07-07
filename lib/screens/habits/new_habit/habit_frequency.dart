@@ -35,15 +35,15 @@ class _HabitFrequencyState extends State<HabitFrequency> {
   }
 
   void Function() _gotoWhenScreen() {
-    return () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HabitWhen(
-                  config: this.widget.config, habit: this.widget.habit),
-            ),
-          )
-        };
+    return () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              HabitWhen(config: this.widget.config, habit: this.widget.habit),
+        ),
+      );
+    };
   }
 
   Widget _buildBody() {
