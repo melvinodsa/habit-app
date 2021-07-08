@@ -5,6 +5,8 @@ import 'package:habit/config/index.dart';
 import 'package:habit/models/habit.dart';
 import 'package:habit/services/habit.dart';
 
+import '../index.dart';
+
 class HabitWhen extends StatefulWidget {
   HabitWhen({Key? key, required this.config, required this.habit})
       : super(key: key);
@@ -98,7 +100,15 @@ class _HabitWhenState extends State<HabitWhen> {
             width: MediaQuery.of(context).size.width - 80,
             child: ElevatedButton(
               onPressed: this._isNextButtonEnabled
-                  ? () => {this.widget.habit.save()}
+                  ? () {
+                      this.widget.habit.save();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HabitsScreen(
+                                    config: this.widget.config,
+                                  )));
+                    }
                   : null,
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.only(top: 20, bottom: 20),
