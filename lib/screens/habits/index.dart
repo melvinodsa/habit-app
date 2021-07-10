@@ -4,6 +4,8 @@ import 'package:habit/components/buttons/expandable_fab.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/constants/inspirational_messages.dart';
 import 'package:habit/screens/habits/new_habit/index.dart';
+import 'package:localstore/localstore.dart';
+import 'package:habit/models/habit.dart';
 
 class HabitsScreen extends StatefulWidget {
   HabitsScreen({Key? key, required this.config}) : super(key: key);
@@ -24,6 +26,16 @@ class _HabitsScreenState extends State<HabitsScreen> {
               ),
           settings: RouteSettings(name: "/habit/new")),
     );
+  }
+
+  @override
+  void initState() {
+    final db = Localstore.instance;
+    db.collection('habits').get().then((habits) {
+      final vals = habits?.values.map((e) => Habit.fromMap(e)).toList();
+      print(vals);
+    });
+    super.initState();
   }
 
   @override

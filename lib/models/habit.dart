@@ -35,16 +35,17 @@ class Habit {
       'category': category.data.toMap(),
       'trackProgress': trackProgress.toInt(),
       'name': name,
+      'description': description,
     };
   }
 
   factory Habit.fromMap(Map<String, dynamic> map) {
     return Habit(
-      id: map['id'],
-      category: Category(data: CardData.fromMap(map['category'])),
-      trackProgress: map['trackProgress'],
-      name: map['name'],
-    );
+        id: map['id'],
+        category: Category(data: CardData.fromMap(map['category'])),
+        trackProgress: parseTrackProgress(map['trackProgress']),
+        name: map['name'],
+        description: map['description']);
   }
 }
 
@@ -69,6 +70,16 @@ extension TrackProgressExtn on TrackProgress {
         return 0;
     }
   }
+}
+
+TrackProgress parseTrackProgress(int value) {
+  if (value == 0) {
+    return TrackProgress.WithYesOrNo;
+  }
+  if (value == 1) {
+    return TrackProgress.WithNumerical;
+  }
+  return TrackProgress.WithYesOrNo;
 }
 
 enum NumericalTrackOperator {

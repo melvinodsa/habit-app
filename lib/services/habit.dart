@@ -8,7 +8,7 @@ extension ExtHabit on Habit {
     final _db = Localstore.instance;
     final id = _db.collection('habits').doc().id;
     this.id = id;
-    return _db.collection('habits').doc(id).set(toMap());
+    return await _db.collection('habits').doc(id).set(toMap());
   }
 
   Future delete() async {
