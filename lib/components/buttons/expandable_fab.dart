@@ -108,6 +108,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           child: FloatingActionButton(
             onPressed: _toggle,
             child: const Icon(Icons.add),
+            heroTag: "addItem",
           ),
         ),
       ),

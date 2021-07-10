@@ -87,6 +87,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
           onPressed: _initiateHabitCreateWizard,
           icon: Icon(Icons.add_circle_outline_rounded),
           label: Text("New Habit"),
+          heroTag: "newHabit",
         )
       ],
     );

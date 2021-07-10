@@ -16,7 +16,7 @@ class Habit {
     DateTime today = DateTime.now();
     this.startDate = DateTime(today.year, today.month, today.day);
   }
-  final String id;
+  late String id;
   final Category category;
   TrackProgress trackProgress;
   String name;

@@ -6,6 +6,8 @@ import 'package:localstore/localstore.dart';
 extension ExtHabit on Habit {
   Future save() async {
     final _db = Localstore.instance;
+    final id = _db.collection('habits').doc().id;
+    this.id = id;
     return _db.collection('habits').doc(id).set(toMap());
   }
 

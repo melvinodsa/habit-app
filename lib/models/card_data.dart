@@ -62,7 +62,7 @@ class CardWithIcon implements CardData {
     return {
       'id': id,
       'label': label,
-      'color': color,
+      'color': color.value,
       'cardType': cardType.toInt(),
       'iconData': {
         'codePoint': iconData.codePoint,
@@ -77,7 +77,7 @@ class CardWithIcon implements CardData {
     return CardWithIcon(
       id: map['id'],
       label: map['label'],
-      color: map['color'],
+      color: Color(map['color']),
       iconData: IconData(
         map['iconData']['codePoint'],
         fontPackage: map['iconData']['fontPackage'],
@@ -114,7 +114,7 @@ class CardWithSvg implements CardData {
     return {
       'id': id,
       'label': label,
-      'color': color,
+      'color': color.value,
       'svgPath': svgPath,
       'cardType': cardType.toInt(),
     };
@@ -124,7 +124,7 @@ class CardWithSvg implements CardData {
     return CardWithSvg(
       id: map['id'],
       label: map['label'],
-      color: map['color'],
+      color: Color(map['color']),
       svgPath: map['svgPath'],
     );
   }

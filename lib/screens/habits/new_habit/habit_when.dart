@@ -38,9 +38,10 @@ class _HabitWhenState extends State<HabitWhen> {
 
   void Function() _gotoHomeScreen() {
     return () {
-      this.widget.habit.save();
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      this.widget.habit.save().then((value) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      });
     };
   }
 
