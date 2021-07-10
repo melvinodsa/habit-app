@@ -36,6 +36,14 @@ class _HabitWhenState extends State<HabitWhen> {
     super.dispose();
   }
 
+  void Function() _gotoHomeScreen() {
+    return () {
+      this.widget.habit.save();
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,17 +107,7 @@ class _HabitWhenState extends State<HabitWhen> {
         Container(
             width: MediaQuery.of(context).size.width - 80,
             child: ElevatedButton(
-              onPressed: this._isNextButtonEnabled
-                  ? () {
-                      this.widget.habit.save();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HabitsScreen(
-                                    config: this.widget.config,
-                                  )));
-                    }
-                  : null,
+              onPressed: this._isNextButtonEnabled ? _gotoHomeScreen() : null,
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.only(top: 20, bottom: 20),
               ),

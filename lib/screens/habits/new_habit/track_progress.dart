@@ -29,9 +29,9 @@ class _TrackHabitProgressState extends State<TrackHabitProgress> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HabitDetails(
-              config: this.widget.config, habit: this.widget.habit),
-        ),
+            builder: (context) => HabitDetails(
+                config: this.widget.config, habit: this.widget.habit),
+            settings: RouteSettings(name: "/habit/new/trackprogress")),
       );
     };
   }

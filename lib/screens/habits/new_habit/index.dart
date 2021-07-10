@@ -28,9 +28,10 @@ class _NewHabitWizardCategoryState extends State<NewHabitWizardCategory> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TrackHabitProgress(
-                  config: this.widget.config, habit: Habit(category: category)),
-            ),
+                builder: (context) => TrackHabitProgress(
+                    config: this.widget.config,
+                    habit: Habit(category: category)),
+                settings: RouteSettings(name: "/habit/new/trackprogress")),
           )
         };
   }

@@ -19,10 +19,10 @@ class _HabitsScreenState extends State<HabitsScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => NewHabitWizardCategory(
-          config: this.widget.config,
-        ),
-      ),
+          builder: (context) => NewHabitWizardCategory(
+                config: this.widget.config,
+              ),
+          settings: RouteSettings(name: "/habit/new")),
     );
   }
 

@@ -39,9 +39,9 @@ class _HabitFrequencyState extends State<HabitFrequency> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              HabitWhen(config: this.widget.config, habit: this.widget.habit),
-        ),
+            builder: (context) =>
+                HabitWhen(config: this.widget.config, habit: this.widget.habit),
+            settings: RouteSettings(name: "/habit/new/when")),
       );
     };
   }

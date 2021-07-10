@@ -62,9 +62,9 @@ class _HabitDetailsState extends State<HabitDetails> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HabitFrequency(
-              config: this.widget.config, habit: this.widget.habit),
-        ),
+            builder: (context) => HabitFrequency(
+                config: this.widget.config, habit: this.widget.habit),
+            settings: RouteSettings(name: "/habit/new/frequency")),
       );
     };
   }
