@@ -4,7 +4,7 @@ import 'package:habit/components/buttons/expandable_fab.dart';
 import 'package:habit/config/index.dart';
 import 'package:habit/constants/inspirational_messages.dart';
 import 'package:habit/screens/habits/new_habit/index.dart';
-import 'package:localstore/localstore.dart';
+import 'package:habit/services/habit.dart';
 import 'package:habit/models/habit.dart';
 
 class HabitsScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class HabitsScreen extends StatefulWidget {
 }
 
 class _HabitsScreenState extends State<HabitsScreen> {
+  List<Habit> _habits = [];
   void _initiateHabitCreateWizard() {
     Navigator.push(
       context,
@@ -30,10 +31,13 @@ class _HabitsScreenState extends State<HabitsScreen> {
 
   @override
   void initState() {
-    final db = Localstore.instance;
-    db.collection('habits').get().then((habits) {
-      final vals = habits?.values.map((e) => Habit.fromMap(e)).toList();
-      print(vals);
+    HabitService.fetchAll().then((habits) {
+      if (habits == null) {
+        return;
+      }
+      setState(() {
+        _habits = habits;
+      });
     });
     super.initState();
   }
@@ -53,14 +57,16 @@ class _HabitsScreenState extends State<HabitsScreen> {
       child: Container(
         margin:
             EdgeInsets.only(left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _backgroundIcon(),
-            _inspirationMessage(),
-            _createHabitNudge(),
-          ],
-        ),
+        child: _habits.isEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _backgroundIcon(),
+                  _inspirationMessage(),
+                  _createHabitNudge(),
+                ],
+              )
+            : _buildHabitList(),
       ),
     );
   }
@@ -102,6 +108,15 @@ class _HabitsScreenState extends State<HabitsScreen> {
           heroTag: "newHabit",
         )
       ],
+    );
+  }
+
+  Widget _buildHabitList() {
+    return Column(
+      children: _habits
+          .map((e) => CheckboxListTile(
+              value: false, title: Text(e.name), onChanged: (_val) => {}))
+          .toList(),
     );
   }
 }
